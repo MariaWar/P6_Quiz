@@ -50,16 +50,7 @@ router.get('/', (req, res, next) => {
 router.get('/author', (req, res, next) => {
     res.render('author');
 });
-//router.get('/quizzes', (req, res, next) =>{
-//  models.quiz.findAll()
-//  .then(quizzes=>{
-//      res.render('quizzes',{quizzes});
-//  })
-//  .catch(error=>next(error));
-    
-//});
-router.get('/quizzes/randomplay',         quizController.randomplay);
-router.get('/quizzes/randomcheck/:quizId(\\d+)',         quizController.randomcheck);
+
 
 // Autoload for routes using :quizId
 router.param('quizId', quizController.load);
@@ -68,9 +59,12 @@ router.param('tipId',  tipController.load);
 
 
 // Routes for the resource /session
-router.get('/session',    sessionController.new);     // login form
-router.post('/session',   sessionController.create);  // create sesion
-router.delete('/session', sessionController.destroy); // close sesion
+router.get('/session',                                   sessionController.new);     // login form
+router.post('/session',                                  sessionController.create);  // create sesion
+router.delete('/session',                                sessionController.destroy); // close sesion
+router.get('/quizzes/randomplay',                        quizController.randomplay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)',         quizController.randomcheck);
+
 
 
 // Routes for the resource /users
@@ -143,5 +137,16 @@ router.delete('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
     quizController.adminOrAuthorRequired,
     tipController.destroy);
 
+//nuevos
+
+router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit',
+    sessionController.loginRequired,
+    tipController.adminOrAuthorRequired,
+    tipController.edit);
+
+router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
+    sessionController.loginRequired,
+    tipController.adminOrAuthorRequired,
+    tipController.update);
 
 module.exports = router;
